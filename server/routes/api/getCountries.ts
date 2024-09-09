@@ -56,6 +56,7 @@ router.get('/info/:countryCode', async (req: Request, res: Response) => {
       borderCountries,
       countryPopulation: countryPopulation.data.populationCounts,
       passedCountryFlag,
+      countryName: passedCountryInfo.commonName,
     });
   } catch (err: any) {
     console.error(err);
