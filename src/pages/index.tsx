@@ -1,6 +1,5 @@
 import { GetServerSideProps } from 'next';
 import Link from 'next/link';
-import { useEffect } from 'react';
 
 import axiosFetch from '@/helpers/axiosFetch';
 
@@ -22,10 +21,6 @@ interface HomeProps {
 }
 
 const Home: React.FC<HomeProps> = ({ countryList }) => {
-  useEffect(() => {
-    console.log(countryList);
-  }, []);
-
   return (
     <>
       <ul>
