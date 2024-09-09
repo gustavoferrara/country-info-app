@@ -26,11 +26,10 @@ router.get('/info/:countryCode', async (req: Request, res: Response) => {
     const passedCountryInfo = await fetchJson(
       `https://date.nager.at/api/v3/CountryInfo/${countryCode}`,
     );
-
     const borderCountries = passedCountryInfo.borders;
     const passedCountryName = passedCountryInfo.commonName.toLowerCase();
 
-    const countryPopulation = await fetchJson(
+    let countryPopulation = await fetchJson(
       'https://countriesnow.space/api/v0.1/countries/population',
       {
         method: 'POST',
@@ -41,16 +40,29 @@ router.get('/info/:countryCode', async (req: Request, res: Response) => {
       },
     );
 
+    if (countryPopulation.error)
+      countryPopulation = await fetchJson(
+        'https://countriesnow.space/api/v0.1/countries/population',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ country: passedCountryInfo.officialName }),
+        },
+      );
+
     const allCountryFlags = await fetchJson(
       `https://countriesnow.space/api/v0.1/countries/flag/images`,
     );
 
     let passedCountryFlag = '';
 
-    allCountryFlags.data.forEach((country: { name: string; flag: string }) => {
-      if (country.name.toLowerCase() === passedCountryName)
-        passedCountryFlag = country.flag;
-    });
+    allCountryFlags.data.forEach(
+      (country: { name: string; flag: string; iso2: string }) => {
+        if (country.iso2 === countryCode) passedCountryFlag = country.flag;
+      },
+    );
 
     res.status(200).json({
       borderCountries,
