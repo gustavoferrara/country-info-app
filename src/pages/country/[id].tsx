@@ -1,8 +1,19 @@
 import { GetServerSideProps } from 'next';
 import Link from 'next/link';
-import { useEffect } from 'react';
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Legend,
+  Rectangle,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from 'recharts';
 
 import axiosFetch from '@/helpers/axiosFetch';
+import styles from '@/styles/CountryPage.module.scss';
 import { BorderCountry, CountryPopulation } from '@/types/types';
 
 export const getServerSideProps: GetServerSideProps = async context => {
@@ -27,9 +38,14 @@ interface CountryPageProps {
 }
 
 const CountryPage: React.FC<CountryPageProps> = ({ countryInfo }) => {
-  useEffect(() => {
-    console.log(countryInfo);
-  }, []);
+  const getFormattedChartData = () => {
+    return countryInfo.countryPopulation.map(dataPoint => {
+      return {
+        population: dataPoint.value,
+        name: dataPoint.year,
+      };
+    });
+  };
 
   return (
     <>
@@ -54,6 +70,39 @@ const CountryPage: React.FC<CountryPageProps> = ({ countryInfo }) => {
               </ul>
             </>
           )}
+
+          {countryInfo.countryPopulation &&
+            countryInfo.countryPopulation.length && (
+              <>
+                <h2>Population over time:</h2>
+                <div className={styles.chart_wrapper}>
+                  <ResponsiveContainer width='100%' height='100%'>
+                    <BarChart
+                      width={500}
+                      height={300}
+                      data={getFormattedChartData()}
+                      margin={{
+                        top: 5,
+                        right: 30,
+                        left: 20,
+                        bottom: 5,
+                      }}
+                    >
+                      <CartesianGrid strokeDasharray='3 3' />
+                      <XAxis dataKey='name' />
+                      <YAxis />
+                      <Tooltip />
+                      <Legend />
+                      <Bar
+                        dataKey='population'
+                        fill='#8884d8'
+                        activeBar={<Rectangle fill='pink' stroke='blue' />}
+                      />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </>
+            )}
         </>
       )}
     </>
