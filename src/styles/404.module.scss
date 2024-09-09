@@ -1,0 +1,24 @@
+@use './partials/fluidSize' as *;
+$base-padding: fluidSize(13, 60, 320, 768);
+
+.container {
+  margin-top: 73px;
+  padding: min(200px, 100vh) $base-padding;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  text-align: center;
+
+  @media screen and (min-width: 68.75em) {
+    padding: min(200px, 100vh) 95px;
+  }
+}
+
+.link {
+  font-size: 20px;
+  margin-top: 8px;
+  transition: color 0.2s ease-out;
+}
