@@ -23,12 +23,12 @@ router.get('/info/:countryCode', async (req: Request, res: Response) => {
   try {
     const { countryCode } = req.params;
 
-    const countryInfo = await fetchJson(
+    const passedCountryInfo = await fetchJson(
       `https://date.nager.at/api/v3/CountryInfo/${countryCode}`,
     );
 
-    const borderCountries = countryInfo.borders;
-    const countryName = countryInfo.commonName.toLowerCase();
+    const borderCountries = passedCountryInfo.borders;
+    const passedCountryName = passedCountryInfo.commonName.toLowerCase();
 
     const countryPopulation = await fetchJson(
       'https://countriesnow.space/api/v0.1/countries/population',
@@ -37,11 +37,26 @@ router.get('/info/:countryCode', async (req: Request, res: Response) => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ country: countryName }),
+        body: JSON.stringify({ country: passedCountryName }),
       },
     );
 
-    res.status(200).json({ borderCountries, countryPopulation });
+    const allCountryFlags = await fetchJson(
+      `https://countriesnow.space/api/v0.1/countries/flag/images`,
+    );
+
+    let passedCountryFlag = '';
+
+    allCountryFlags.data.forEach((country: { name: string; flag: string }) => {
+      if (country.name.toLowerCase() === passedCountryName)
+        passedCountryFlag = country.flag;
+    });
+
+    res.status(200).json({
+      borderCountries,
+      countryPopulation: countryPopulation.data.populationCounts,
+      passedCountryFlag,
+    });
   } catch (err: any) {
     console.error(err);
     res.status(500).json({ error: 'Server error' });
