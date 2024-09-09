@@ -14,9 +14,9 @@ app
   .prepare()
   .then(() => {
     const server = express();
-
     server.disable('x-powered-by');
 
+    console.log(`TESTURL environment variable: ${process.env.TESTURL}`);
     server.use(express.json());
 
     server.use('/api/getCountries', getCountriesRoute);
