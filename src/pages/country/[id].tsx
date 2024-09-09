@@ -1,6 +1,5 @@
 import { GetServerSideProps } from 'next';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 
 import axiosFetch from '@/helpers/axiosFetch';
@@ -34,7 +33,29 @@ const CountryPage: React.FC<CountryPageProps> = ({ countryInfo }) => {
 
   return (
     <>
-      <div></div>
+      {countryInfo && (
+        <>
+          <h1>{countryInfo.countryName}</h1>
+          <img
+            src={countryInfo.passedCountryFlag}
+            alt={`Flag of ${countryInfo.countryName}`}
+          />
+          {countryInfo.borderCountries && countryInfo.borderCountries.length && (
+            <>
+              <h2>Countries that border {countryInfo.countryName}:</h2>
+              <ul>
+                {countryInfo.borderCountries.map(borderingCountry => (
+                  <li key={borderingCountry.countryCode}>
+                    <Link href={`/country/${borderingCountry.countryCode}`}>
+                      <a>{borderingCountry.commonName}</a>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+        </>
+      )}
     </>
   );
 };
