@@ -51,14 +51,17 @@ const CountryPage: React.FC<CountryPageProps> = ({ countryInfo }) => {
     <>
       {countryInfo && (
         <>
-          <h1>{countryInfo.countryName}</h1>
+          <h1 className={styles.title}>{countryInfo.countryName}</h1>
           <img
+            className={styles.flag}
             src={countryInfo.passedCountryFlag}
             alt={`Flag of ${countryInfo.countryName}`}
           />
           {countryInfo.borderCountries && countryInfo.borderCountries.length && (
             <>
-              <h2>Countries that border {countryInfo.countryName}:</h2>
+              <h2 className={styles.subheading}>
+                Countries that border {countryInfo.countryName}:
+              </h2>
               <ul>
                 {countryInfo.borderCountries.map(borderingCountry => (
                   <li key={borderingCountry.countryCode}>
@@ -74,7 +77,7 @@ const CountryPage: React.FC<CountryPageProps> = ({ countryInfo }) => {
           {countryInfo.countryPopulation &&
             countryInfo.countryPopulation.length && (
               <>
-                <h2>Population over time:</h2>
+                <h2 className={styles.subheading}>Population over time:</h2>
                 <div className={styles.chart_wrapper}>
                   <ResponsiveContainer width='100%' height='100%'>
                     <BarChart
