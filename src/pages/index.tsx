@@ -14,19 +14,6 @@ export const getServerSideProps: GetServerSideProps = async () => {
   };
 };
 
-export interface BorderCountry {
-  commonName: string;
-  officialName: string;
-  countryCode: string;
-  region: string;
-  borders: any;
-}
-
-export interface CountryPopulation {
-  year: number;
-  value: number;
-}
-
 interface HomeProps {
   countryList: {
     availableCountries: Array<{ countryCode: string; name: string }>;

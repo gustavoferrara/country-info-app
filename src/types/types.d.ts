@@ -7,3 +7,16 @@ export interface BackendError extends AxiosError {
     };
   };
 }
+
+export interface BorderCountry {
+  commonName: string;
+  officialName: string;
+  countryCode: string;
+  region: string;
+  borders: any;
+}
+
+export interface CountryPopulation {
+  year: number;
+  value: number;
+}
